@@ -1,0 +1,110 @@
+ex1 
+
+void setup()
+{   
+pinMode(8, OUTPUT); 
+pinMode(2, INPUT); 
+} 
+void loop() 
+{    
+if (digitalRead(2) == 0) {     
+    digitalWrite(8, HIGH);  
+}  
+else 
+{   
+digitalWrite(8, LOW);  
+}  
+} 
+
+ex2
+#include <Servo.h>
+
+Servo myservo;
+
+void setup() {
+  pinMode(2, INPUT);
+  myservo.attach(9);
+}
+
+void loop() {
+  if (digitalRead(2) == LOW) {
+    // Object Detected
+    myservo.write(90);
+  }
+  else {
+    myservo.write(0);
+  }
+}
+
+Ex3
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12,11,5,4,3,2);
+
+void setup() {
+  pinMode(9, OUTPUT);
+  pinMode(10, INPUT);
+  lcd.begin(16,2);
+}
+
+void loop() {
+  digitalWrite(9, LOW);
+  delayMicroseconds(2);
+  digitalWrite(9, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(9, LOW);
+
+  float d = pulseIn(10,HIGH)*0.034/2;
+
+  lcd.setCursor(0,0);
+  lcd.print("Distance:");
+  lcd.setCursor(0,1);
+  lcd.print(d);
+  lcd.print(" cm");
+  delay(500);
+}
+
+Ex4
+
+void setup()
+{   
+pinMode(8, OUTPUT); 
+pinMode(2, INPUT); 
+} 
+void loop() 
+{    
+if (digitalRead(2) == 0) {     
+    digitalWrite(8, HIGH);  
+}  
+else 
+{   
+digitalWrite(8, LOW);  
+}  
+} 
+
+ex5
+const int ldrPin = A0;
+const int ledPin = 9;
+
+int ldrValue = 0;
+int threshold = 500;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  ldrValue = analogRead(ldrPin);
+
+  Serial.print("LDR Value: ");
+  Serial.println(ldrValue);
+
+  if (ldrValue < threshold) {
+    digitalWrite(ledPin, HIGH);
+  }
+  else {
+    digitalWrite(ledPin, LOW);
+  }
+
+  delay(200);
+}
