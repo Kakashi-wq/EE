@@ -1,0 +1,80 @@
+E6
+#include <ESP8266WiFi.h>
+#include <ThingSpeak.h>
+
+WiFiClient c;
+
+void setup() {
+  WiFi.begin("WIFI_NAME", "PASSWORD");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+  }
+
+  ThingSpeak.begin(c);
+}
+
+void loop() {
+  float t = analogRead(A0) * 3.3 / 1023 * 100;
+
+  ThingSpeak.writeField(CHANNEL_ID, 1, t, "API_KEY");
+
+  delay(15000);
+}
+
+ex7
+#include <WiFi.h>
+#include <ThingSpeak.h>
+
+WiFiClient c;
+
+void setup() {
+  pinMode(2, OUTPUT);
+
+  WiFi.begin("WIFI_NAME", "PASSWORD");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+  }
+
+  ThingSpeak.begin(c);
+}
+
+void loop() {
+  int ldr = analogRead(34);
+
+  int s = (ldr < 2000) ? 1 : 0;
+
+  digitalWrite(2, s);
+
+  ThingSpeak.setField(1, ldr);
+  ThingSpeak.setField(2, s);
+
+  ThingSpeak.writeFields(CHANNEL_ID, "API_KEY");
+
+  delay(20000);
+}
+
+ex8
+```bash
+curl -X PUT "http://localhost:8080/api/2/things/sensorNamespace:temperatureSensor" \
+-u ditto:ditto \
+-H "Content-Type: application/json" \
+-d @- <<'JSON'
+{
+  "attributes": {
+    "location": "Room 101",
+    "manufacturer": "XYZ Corp"
+  },
+  "features": {
+    "temperature": {
+      "properties": {
+        "value": 25.5
+      }
+    }
+  }
+}
+JSON
+
+curl -u ditto:ditto \
+"http://localhost:8080/api/2/things/sensorNamespace:temperatureSensor"
